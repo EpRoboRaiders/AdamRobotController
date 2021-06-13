@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * This is NOT an opmode.
  *
- * This class can be used to define all the specific hardware for a single robot.
+ * This class can be used to define all the specific hardware for a single 
  * In this case that robot is a Pushbot.
  * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
  *
@@ -55,7 +55,7 @@ public class hardware
     /* Public OpMode members. */
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
-   // public DcMotor  leftArm     = null;
+    //public DcMotor  leftArm     = null;
     //public Servo    leftClaw    = null;
     //public Servo    rightClaw   = null;
 
@@ -63,9 +63,18 @@ public class hardware
     public static final double ARM_UP_POWER    =  0.45 ;
     public static final double ARM_DOWN_POWER  = -0.45 ;
 
+    static final double     COUNTS_PER_MOTOR_REV    = 145.1 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 3.75 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     DRIVE_SPEED             = 0.6;
+    static final double     TURN_SPEED              = 0.5;
+
+
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
+    private ElapsedTime timeout  = new ElapsedTime();
 
     /* Constructor */
     public hardware(){
@@ -96,10 +105,11 @@ public class hardware
        // leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize ALL installed servos.
-       // leftClaw  = hwMap.get(Servo.class, "left_hand");
+        //leftClaw  = hwMap.get(Servo.class, "left_hand");
         //rightClaw = hwMap.get(Servo.class, "right_hand");
         //leftClaw.setPosition(MID_SERVO);
         //rightClaw.setPosition(MID_SERVO);
     }
+
  }
 
