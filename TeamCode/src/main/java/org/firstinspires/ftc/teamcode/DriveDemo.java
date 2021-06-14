@@ -24,7 +24,7 @@ public class DriveDemo extends OpMode {
     OneShot leftStickButtonPressed = new OneShot();
     OneShot rightStickButtonPressed = new OneShot();
 
-    private final int TIMER_LENGTH = 10;
+    private final int TIMER_LENGTH = 60;
 
     public void init() {
         demoMethods.init(hardwareMap);
@@ -71,7 +71,7 @@ public class DriveDemo extends OpMode {
                 demoMethods.playSound(SoundPlayer.Sounds.ROBOT_VOICE);
             }
             if (rightStickButtonPressed.checkState(gamepad1.right_stick_button)) {
-                // demoMethods.playSound(SoundPlayer.Sounds.ADD_YOUR_SOUND_HERE_ADAM);
+                demoMethods.playSound(SoundPlayer.Sounds.DUCK_TAPE);
             }
 
         }

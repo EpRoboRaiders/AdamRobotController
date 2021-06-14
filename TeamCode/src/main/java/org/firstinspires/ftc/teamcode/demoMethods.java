@@ -6,17 +6,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class DemoMethods {
 
 
-
-
-
-
-
-    hardware robotChassis = new hardware();
+    public hardware robotChassis = new hardware();
     SoundPlayer soundPlayer = new SoundPlayer();
     ElapsedTime methodTime = new ElapsedTime();
 
     HardwareMap hwMap           =  null;
 
+
+    
     public DemoMethods() {
 
     }
@@ -27,22 +24,14 @@ public class DemoMethods {
         robotChassis.init(hwMap);
     }
 
-    public void forward(double seconds) {
-        methodTime.reset();
-        robotChassis.leftDrive.setPower(0.25);
-        robotChassis.rightDrive.setPower(0.25);
-        while (methodTime.seconds() < seconds) {}
-        robotChassis.leftDrive.setPower(0);
-        robotChassis.rightDrive.setPower(0);
+    public void forward(double inches) {
+       robotChassis.encoderDrive(0.25,inches,inches,5);
+
     }
 
-    public void backward(double seconds) {
-        methodTime.reset();
-        robotChassis.leftDrive.setPower(-0.25);
-        robotChassis.rightDrive.setPower(-0.25);
-        while (methodTime.seconds() < seconds) {}
-        robotChassis.leftDrive.setPower(0);
-        robotChassis.rightDrive.setPower(0);
+    public void backward(double inches) {
+        robotChassis.encoderDrive(0.25,-inches,-inches,5);
+
     }
 
     public void turnLeft (double seconds) {
@@ -68,34 +57,40 @@ public class DemoMethods {
         while (methodTime.seconds() < seconds) {}
     }
 
-    public void playSound(String soundName) {
+    public void playSound(SoundPlayer.Sounds soundName) {
+
+
         switch(soundName) {
-            case "r2d2":
-                soundPlayer.playSoundByID(soundPlayer.r2d2SoundID);
-                break;
-            case "appleCrunch":
+
+            case APPLE_CRUNCH:
                 soundPlayer.playSoundByID(soundPlayer.appleCrunchSoundID);
                 break;
-            case "tireSqueal":
-                soundPlayer.playSoundByID(soundPlayer.tireSquealSoundID);
-                break;
-            case "wilhelmScream":
-                soundPlayer.playSoundByID(soundPlayer.wilhelmScreamSoundID);
-                break;
-            case "goatScream":
-                soundPlayer.playSoundByID(soundPlayer.goatScreamSoundID);
-                break;
-            case "burp":
+            case BURP:
                 soundPlayer.playSoundByID(soundPlayer.burpSoundID);
                 break;
-            case "pop":
-                soundPlayer.playSoundByID(soundPlayer.popSoundID);
-                break;
-            case "carRev":
+            case CAR_REV:
                 soundPlayer.playSoundByID(soundPlayer.carRevSoundID);
                 break;
-            default: //case "robotVoice":
+            case DUCK_TAPE:
+                soundPlayer.playSoundByID(soundPlayer.ducktapeSoundID);
+                break;
+            case GOAT_SCREAM:
+                soundPlayer.playSoundByID(soundPlayer.goatScreamSoundID);
+                break;
+            case POP:
+                soundPlayer.playSoundByID(soundPlayer.popSoundID);
+                break;
+            case ROBOT_VOICE:
                 soundPlayer.playSoundByID(soundPlayer.robotVoiceSoundID);
+                break;
+            case R2D2:
+                soundPlayer.playSoundByID(soundPlayer.r2d2SoundID);
+                break;
+            case TIRE_SQUEAL:
+                soundPlayer.playSoundByID(soundPlayer.tireSquealSoundID);
+                break;
+            default: //case WILHELM_SCREAM:
+                soundPlayer.playSoundByID(soundPlayer.wilhelmScreamSoundID);
                 break;
 
         }

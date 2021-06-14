@@ -10,6 +10,7 @@ public class SoundPlayer {
     public int appleCrunchSoundID = 0;
     public int burpSoundID = 0;
     public int carRevSoundID = 0;
+    public int ducktapeSoundID = 0;
     public int goatScreamSoundID = 0;
     public int popSoundID = 0;
     public int robotVoiceSoundID = 0;
@@ -25,6 +26,7 @@ public class SoundPlayer {
         APPLE_CRUNCH,
         BURP,
         CAR_REV,
+        DUCK_TAPE,
         GOAT_SCREAM,
         POP,
         ROBOT_VOICE,
@@ -45,6 +47,7 @@ public class SoundPlayer {
         appleCrunchSoundID = hwMap.appContext.getResources().getIdentifier("apple_crunch", "raw", hwMap.appContext.getPackageName());
         burpSoundID = hwMap.appContext.getResources().getIdentifier("burp", "raw", hwMap.appContext.getPackageName());
         carRevSoundID = hwMap.appContext.getResources().getIdentifier("car_rev", "raw", hwMap.appContext.getPackageName());
+        ducktapeSoundID = hwMap.appContext.getResources().getIdentifier("duck_tape", "raw", hwMap.appContext.getPackageName());
         goatScreamSoundID = hwMap.appContext.getResources().getIdentifier("goat_scream", "raw", hwMap.appContext.getPackageName());
         popSoundID = hwMap.appContext.getResources().getIdentifier("pop", "raw", hwMap.appContext.getPackageName());
         tireSquealSoundID = hwMap.appContext.getResources().getIdentifier("tire_squeal", "raw", hwMap.appContext.getPackageName());

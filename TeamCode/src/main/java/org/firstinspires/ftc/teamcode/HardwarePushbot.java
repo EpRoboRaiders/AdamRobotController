@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * This is NOT an opmode.
  *
- * This class can be used to define all the specific hardware for a single 
+ * This class can be used to define all the specific hardware for a single robot.
  * In this case that robot is a Pushbot.
  * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
  *
@@ -50,34 +50,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Servo channel:  Servo to open left claw:  "left_hand"
  * Servo channel:  Servo to open right claw: "right_hand"
  */
-public class hardware
+public class HardwarePushbot
 {
     /* Public OpMode members. */
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
-    //public DcMotor  leftArm     = null;
-    //public Servo    leftClaw    = null;
-    //public Servo    rightClaw   = null;
 
     public static final double MID_SERVO       =  0.5 ;
     public static final double ARM_UP_POWER    =  0.45 ;
     public static final double ARM_DOWN_POWER  = -0.45 ;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 145.1 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 3.75 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
-
-
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
-    public ElapsedTime timeout  = new ElapsedTime();
+    private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public hardware(){
+    public HardwarePushbot() {
 
     }
 
@@ -89,70 +77,19 @@ public class hardware
         // Define and Initialize Motors
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
-       // leftArm    = hwMap.get(DcMotor.class, "left_arm");
         leftDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-       // leftArm.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       // leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Define and initialize ALL installed servos.
-        //leftClaw  = hwMap.get(Servo.class, "left_hand");
-        //rightClaw = hwMap.get(Servo.class, "right_hand");
-        //leftClaw.setPosition(MID_SERVO);
-        //rightClaw.setPosition(MID_SERVO);
+
     }
-    public void encoderDrive(double speed,
-                              double leftInches, double rightInches,
-                              double timeoutS) {
-    int newLeftTarget;
-    int newRightTarget;
-
-    // Determine new target position, and pass to motor controller
-    newLeftTarget = leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-    newRightTarget = rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-    leftDrive.setTargetPosition(newLeftTarget);
-    rightDrive.setTargetPosition(newRightTarget);
-
-    // Turn On RUN_TO_POSITION
-    leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    // reset the timeout time and start motion.
-    timeout.reset();
-    leftDrive.setPower(Math.abs(speed));
-    rightDrive.setPower(Math.abs(speed));
-
-    // keep looping while we are still active, and there is time left, and both motors are running.
-    // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-    // its target position, the motion will stop.  This is "safer" in the event that the robot will
-    // always end the motion as soon as possible.
-    // However, if you require that BOTH motors have finished their moves before the robot continues
-    // onto the next step, use (isBusy() || isBusy()) in the loop test.
-    while ((timeout.seconds() < timeoutS) &&
-            (leftDrive.isBusy() && rightDrive.isBusy())) {}
-
-    // Stop all motion;
-    leftDrive.setPower(0);
-    rightDrive.setPower(0);
-
-    // Turn off RUN_TO_POSITION
-    leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-    //  sleep(250);   // optional pause after each move
-
-       
-}
-    
-
  }
 
