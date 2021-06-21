@@ -22,8 +22,14 @@ public class ProgrammingDemo extends LinearOpMode {
         telemetry.addData("Status", "Ready to Go!");
         telemetry.update();
         waitForStart();
+        dm.robotChassis.timeout.reset();
+        dm.robotChassis.leftDrive.setPower(.1);
+        dm.robotChassis.rightDrive.setPower(.1);
+        while(dm.robotChassis.timeout.seconds() < 3) {
 
-        encoderDrive(0.25, -10, -10, 5);
+        }
+        dm.robotChassis.leftDrive.setPower(0);
+        dm.robotChassis.rightDrive.setPower(0);
         //dm.backward(10);
         //dm.pause(1);
         //dm.playSound(Sounds.APPLE_CRUNCH);
@@ -32,15 +38,15 @@ public class ProgrammingDemo extends LinearOpMode {
 
 
     }
-    public void encoderDrive(double speed,
+    public void encoderDrivee(double speed,
                              double leftInches, double rightInches,
                              double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
 
         // Determine new target position, and pass to motor controller
-        newLeftTarget = dm.robotChassis.leftDrive.getCurrentPosition() - (int)(leftInches * COUNTS_PER_INCH);
-        newRightTarget = dm.robotChassis.rightDrive.getCurrentPosition() - (int)(rightInches * COUNTS_PER_INCH);
+        newLeftTarget = dm.robotChassis.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+        newRightTarget = dm.robotChassis.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
         dm.robotChassis.leftDrive.setTargetPosition(newLeftTarget);
         dm.robotChassis.rightDrive.setTargetPosition(newRightTarget);
 
