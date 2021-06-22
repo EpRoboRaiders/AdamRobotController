@@ -67,7 +67,7 @@ public class hardware
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 3.75 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
+            (WHEEL_DIAMETER_INCHES * 3.1415)/2;
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
@@ -100,9 +100,12 @@ public class hardware
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       // leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Define and initialize ALL installed servos.
         //leftClaw  = hwMap.get(Servo.class, "left_hand");
@@ -113,43 +116,61 @@ public class hardware
     public void encoderDrive(double speed,
                               double leftInches, double rightInches,
                               double timeoutS) {
-    int newLeftTarget;
-    int newRightTarget;
+        int newLeftTarget;
+        int newRightTarget;
 
-    // Determine new target position, and pass to motor controller
-    newLeftTarget = leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-    newRightTarget = rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-    leftDrive.setTargetPosition(newLeftTarget);
-    rightDrive.setTargetPosition(newRightTarget);
+        // Determine new target position, and pass to motor controller
+        newLeftTarget = leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+        newRightTarget = rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+        leftDrive.setTargetPosition(newLeftTarget);
+        rightDrive.setTargetPosition(newRightTarget);
 
-    // Turn On RUN_TO_POSITION
-    leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // Turn On RUN_TO_POSITION
+        //leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-    // reset the timeout time and start motion.
-    timeout.reset();
-    leftDrive.setPower(Math.abs(speed));
-    rightDrive.setPower(Math.abs(speed));
+        // reset the timeout time and start motion.
+        timeout.reset();
 
-    // keep looping while we are still active, and there is time left, and both motors are running.
-    // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-    // its target position, the motion will stop.  This is "safer" in the event that the robot will
-    // always end the motion as soon as possible.
-    // However, if you require that BOTH motors have finished their moves before the robot continues
-    // onto the next step, use (isBusy() || isBusy()) in the loop test.
-    while ((timeout.seconds() < timeoutS) &&
-            (leftDrive.isBusy() && rightDrive.isBusy())) {}
+        if (leftInches < 0) {
+            leftDrive.setPower(speed);
+            rightDrive.setPower(speed);
+        }
+        else {
+            leftDrive.setPower(-speed);
+            rightDrive.setPower(-speed);
+        }
 
-    // Stop all motion;
-    leftDrive.setPower(0);
-    rightDrive.setPower(0);
 
-    // Turn off RUN_TO_POSITION
-    leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
 
-    //  sleep(250);   // optional pause after each move
+        if (newLeftTarget > leftDrive.getCurrentPosition()) {
+            while ((timeout.seconds() < timeoutS) &&
+                    (leftDrive.getCurrentPosition() <= newLeftTarget && rightDrive.getCurrentPosition() <= newRightTarget)) {
+            }
+        }
+        else {
+            while ((timeout.seconds() < timeoutS) &&
+                    (leftDrive.getCurrentPosition() >= newLeftTarget && rightDrive.getCurrentPosition() >= newRightTarget)) {
+            }
+        }
 
+        // Stop all motion;
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //  sleep(250);   // optional pause after each move
        
 }
     

@@ -34,20 +34,20 @@ public class DemoMethods {
 
     }
 
-    public void turnLeft (double seconds) {
+    public void turnLeft () {
         methodTime.reset();
-        robotChassis.leftDrive.setPower(-0.25);
-        robotChassis.rightDrive.setPower(0.25);
-        while (methodTime.seconds() < seconds) {}
+        robotChassis.leftDrive.setPower(-0.27);
+        robotChassis.rightDrive.setPower(0.27);
+        while (methodTime.seconds() < 0.4) {}
         robotChassis.leftDrive.setPower(0);
         robotChassis.rightDrive.setPower(0);
     }
 
-    public void turnRight (double seconds) {
+    public void turnRight() {
         methodTime.reset();
-        robotChassis.leftDrive.setPower(0.25);
-        robotChassis.rightDrive.setPower(-0.25);
-        while (methodTime.seconds() < seconds) {}
+        robotChassis.leftDrive.setPower(0.27);
+        robotChassis.rightDrive.setPower(-0.27);
+        while (methodTime.seconds() < 0.4) {}
         robotChassis.leftDrive.setPower(0);
         robotChassis.rightDrive.setPower(0);
     }
