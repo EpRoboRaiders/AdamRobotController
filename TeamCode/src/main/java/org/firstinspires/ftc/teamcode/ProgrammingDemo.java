@@ -18,16 +18,18 @@ public class ProgrammingDemo extends LinearOpMode {
 
     public void runOpMode() {
         dm.init(hardwareMap);
-
         telemetry.addData("Status", "Ready to Go!");
         telemetry.update();
         waitForStart();
+        // Enter your code below this line!
+
+        dm.forward(10);
         dm.turnLeft();
-        //dm.backward(10);
-        //dm.pause(1);
-        //dm.playSound(Sounds.APPLE_CRUNCH);
-
-
+        dm.forward(5);
+        dm.turnRight();
+        dm.turnRight();
+        dm.forward(10);
+        dm.playSound(Sounds.BURP);
 
 
     }
