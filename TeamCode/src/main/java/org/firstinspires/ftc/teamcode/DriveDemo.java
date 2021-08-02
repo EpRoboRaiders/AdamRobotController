@@ -24,7 +24,7 @@ public class DriveDemo extends OpMode {
     OneShot leftStickButtonPressed = new OneShot();
     OneShot rightStickButtonPressed = new OneShot();
 
-    private final int TIMER_LENGTH = 90;
+    private final int TIMER_LENGTH = 9999;
 
     public void init() {
         demoMethods.init(hardwareMap);
@@ -37,8 +37,8 @@ public class DriveDemo extends OpMode {
     public void loop() {
         if (driveTimer.seconds() < TIMER_LENGTH) {
 
-            demoMethods.robotChassis.leftDrive.setPower(-gamepad1.left_stick_y * 0.25);
-            demoMethods.robotChassis.rightDrive.setPower(-gamepad1.right_stick_y * 0.25);
+            demoMethods.robotChassis.leftDrive.setPower(-gamepad1.right_stick_y *0.3);
+            demoMethods.robotChassis.rightDrive.setPower(-gamepad1.left_stick_y * 0.3);
 
             telemetry.addData("Time Left", Math.round(TIMER_LENGTH-driveTimer.seconds()));
             telemetry.update();

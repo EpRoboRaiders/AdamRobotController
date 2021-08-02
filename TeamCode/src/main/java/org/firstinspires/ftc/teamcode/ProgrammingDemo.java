@@ -29,7 +29,7 @@ public class ProgrammingDemo extends LinearOpMode {
         dm.turnRight();
         dm.turnRight();
         dm.forward(10);
-        dm.playSound(Sounds.BURP);
+        dm.playSound(Sounds.APPLE_CRUNCH);
 
 
     }

@@ -24,32 +24,35 @@ public class DemoMethods {
         robotChassis.init(hwMap);
     }
 
-    public void forward(double inches) {
+    public void backward(double inches) { //forward
        robotChassis.encoderDrive(0.25,inches,inches,5);
-
+        pause(1);
     }
 
-    public void backward(double inches) {
+    public void forward(double inches) { //backward
         robotChassis.encoderDrive(0.25,-inches,-inches,5);
-
+        pause(1);
     }
 
-    public void turnLeft () {
+    public void turnRight()  { //turnRight
         methodTime.reset();
         robotChassis.leftDrive.setPower(-0.27);
         robotChassis.rightDrive.setPower(0.27);
         while (methodTime.seconds() < 0.4) {}
         robotChassis.leftDrive.setPower(0);
         robotChassis.rightDrive.setPower(0);
+        pause(1);
+
     }
 
-    public void turnRight() {
+    public void turnLeft() { //turnRight
         methodTime.reset();
         robotChassis.leftDrive.setPower(0.27);
         robotChassis.rightDrive.setPower(-0.27);
         while (methodTime.seconds() < 0.4) {}
         robotChassis.leftDrive.setPower(0);
         robotChassis.rightDrive.setPower(0);
+        pause(1);
     }
 
     public void pause(double seconds) {
@@ -94,6 +97,7 @@ public class DemoMethods {
                 break;
 
         }
+        pause(1);
     }
 
 
